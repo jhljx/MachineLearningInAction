@@ -2,6 +2,8 @@
 
 import matplotlib.pyplot as plt
 
+from pylab import *  
+mpl.rcParams['font.sans-serif'] = ['SimHei']
 
 decisionNode = dict(boxstyle="sawtooth", fc="0.8")
 leafNode = dict(boxstyle="round4", fc="0.8")
@@ -14,7 +16,7 @@ def plotNode(nodeTxt, centerPt, parentPt, nodeType):
 		textcoords='axes fraction', va='center', ha='center', bbox=nodeType, arrowprops=arrow_args)  
 	#那会把axes fraction写错成axe fraction了
 
-'''def createPlot():
+def createPlotOrigin():
 	fig = plt.figure(1, facecolor='white')
 	fig.clf()
 	print 'yes'
@@ -23,7 +25,7 @@ def plotNode(nodeTxt, centerPt, parentPt, nodeType):
 	plotNode(U'决策节点', (0.5, 0.1), (0.1, 0.5), decisionNode)
 	print 'create 1'
 	plotNode(U'叶节点', (0.8, 0.1), (0.3, 0.8), leafNode)
-	plt.show()'''
+	plt.show()
 
 
 def getNumLeafs(myTree):
@@ -51,7 +53,7 @@ def getTreeDepth(myTree):
 			maxDepth = thisDepth
 	return maxDepth
 
-
+#输出预先存储的树的信息，避免每次测试代码时都要从数据中创建树的麻烦
 def retrieveTree(i):
 	listOfTrees = [{'no surfacing': {0: 'no', 1: {'flippers': {0: 'no', 1: 'yes'}}}},
 		{'no surfacing': {0: 'no', 1: {'flippers': {0: {'head': {0: 'no', 1: 'yes'}}, 1: 'no'}}}}]
@@ -73,6 +75,7 @@ def plotTree(myTree, parentPt, nodeTxt):
 	firstStr = myTree.keys()[0]
 	cntrPt = (plotTree.xOff + (1.0 + float(numLeafs))/2.0/plotTree.totalW, plotTree.yOff)
 	plotMidText(cntrPt, parentPt, nodeTxt)  #标记子节点的属性值
+	#绘制子节点具有的特征值，或者沿此分支向下的数据实例必须具有的特征值。
 	plotNode(firstStr, cntrPt, parentPt, decisionNode)
 	secondDict = myTree[firstStr]
 	plotTree.yOff = plotTree.yOff - 1.0/plotTree.totalD  #减少y偏移
@@ -87,12 +90,15 @@ def plotTree(myTree, parentPt, nodeTxt):
 
 
 def createPlot(inTree):
-	fig = plt.figure(1, facecolor='white')
+	fig = plt.figure(1, facecolor='white',figsize=(7,7), dpi=105)
 	fig.clf()
 	axprops = dict(xticks=[], yticks=[])
 	createPlot.ax1 = plt.subplot(111, frameon=False, **axprops)
+	#全局变量totalW存储树的宽度，totalD存储树的深度
 	plotTree.totalW = float(getNumLeafs(inTree))
 	plotTree.totalD = float(getTreeDepth(inTree))
+	#树的宽度用于计算放置判断节点的位置，主要的计算原则是将它放在所有叶子节点中间，而不仅仅是它子节点的中间。
+	#下面的两个全局变量用来追踪已经绘制的节点位置，以及放置下一个节点的恰当位置。
 	plotTree.xOff = -0.5/plotTree.totalW
 	plotTree.yOff = 1.0
 	plotTree(inTree, (0.5,1.0), '')

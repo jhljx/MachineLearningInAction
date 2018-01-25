@@ -17,6 +17,7 @@ def createDataSet():
 def calcShannonEnt(dataSet):
 	numEntries = len(dataSet)
 	labelCounts = {}
+	#为所有可能分类创建字典
 	for featVec in dataSet:
 		currentLabel = featVec[-1]  # 
 		if currentLabel not in labelCounts.keys():
@@ -26,12 +27,16 @@ def calcShannonEnt(dataSet):
 	shannonEnt = 0.0
 	for key in labelCounts:
 		prob = float(labelCounts[key]) / numEntries
+		#以2为底求对数
 		shannonEnt -= prob * log(prob, 2)
 	return shannonEnt
 
 #按照给定特征划分数据集
+#三个参数：待划分的数据集，划分数据集的特征，需要返回的特征的值
 def splitDataSet(dataSet, axis, value):
+	#创建新的list对象
 	retDataSet = []
+	#抽取
 	for featVec in dataSet:
 		if featVec[axis] == value:
 			reducedFeatVec = featVec[:axis]
@@ -43,6 +48,7 @@ def splitDataSet(dataSet, axis, value):
 def chooseBestFeatureToSplit(dataSet):
 	numFeatures = len(dataSet[0]) - 1
 	#print(numFeatures)
+	#计算整个数据集的原始香农熵，保存最初的无序度量值，用于与划分之后的数据集计算的熵进行比较
 	baseEntropy = calcShannonEnt(dataSet)
 	bestInfoGain = 0.0
 	bestFeature = -1
