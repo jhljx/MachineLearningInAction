@@ -18,6 +18,7 @@ def sigmoid(inX):
 
 #dataMatIn是二维numpy数组，存放的是100*3的矩阵，包含2列特征和全1的一列特征
 def gradAscent(dataMatIn, classLabels):
+	#转换为numpy矩阵数据类型
 	dataMatrix = np.mat(dataMatIn)
 	labelMat = np.mat(classLabels).transpose()
 	m, n = np.shape(dataMatrix)
@@ -27,7 +28,7 @@ def gradAscent(dataMatIn, classLabels):
 	for k in range(maxCycles):
 		h = sigmoid(dataMatrix * weights)
 		error = (labelMat - h)
-		weights = weights + alpha * dataMatrix.transpose() * error
+		weights = weights + alpha * dataMatrix.transpose() * error #矩阵相乘
 	return weights
 
 
