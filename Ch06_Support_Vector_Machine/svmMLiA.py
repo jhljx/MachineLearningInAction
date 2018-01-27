@@ -31,10 +31,10 @@ def clipAlpha(aj, H, L):
 #参数为数据集、类别标签、常数C、容错率和退出前最大的循环次数
 def smoSimple(dataMatIn, classLabels, C, toler, maxIter):
 	dataMatrix = np.mat(dataMatIn)
-	labelMat = np.mat(classLabels).transpoSe()
+	labelMat = np.mat(classLabels).transpose()
 	b = 0
 	m, n = np.shape(dataMatrix)
-	alphas = np.mat(np.zeroS((m,1)))
+	alphas = np.mat(np.zeros((m,1)))
 	iters = 0 #该变量存储的是在没有任何alpha改变的情况下遍历数据集的次数
 	while(iters < maxIter):
 		alphaPairsChanged = 0  #用于记录alpha是否已经进行优化
